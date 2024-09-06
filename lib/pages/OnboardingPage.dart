@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:makao_test/model/OnBoardingModel.dart';
+import 'package:makao_test/pages/LoginPage.dart';
 
 
 class OnBoardingPage extends StatefulWidget {
@@ -12,6 +14,7 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   int currentIndex=0;
+  bool isLastPage = false;
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
@@ -54,14 +57,18 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                           color: Colors.black45
                                       ),
                                     ),*/
-                                    SizedBox(height: 50,),
-                                    Text(
-                                      items.title,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 27,
-                                          color: Colors.black
+                                    SizedBox(height: 40,),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                                      child: Text(
+                                        items.title,
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.lato(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 27,
+                                            fontStyle: FontStyle.italic,
+                                            color: Colors.black
+                                        )
                                       ),
                                     )
                                   ],
@@ -70,6 +77,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               onPageChanged: (value){
                                 setState(() {
                                   currentIndex=value;
+                                  isLastPage = currentIndex == OnBoardingItems.length - 1;
                                 });
                               }
                           ),
@@ -81,7 +89,71 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               dotIndicator(isSelected: index == currentIndex)
                           ],
                         ),
-                        SizedBox(height: 50,)
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15,right: 15),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  if(currentIndex != 0 && currentIndex != OnBoardingItems.length-1)
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            currentIndex = OnBoardingItems.length-1;
+                                          });
+                                        },
+                                        child: Text(
+                                          "Skip",
+                                          style: GoogleFonts.lato(
+                                            fontSize: 15,
+                                            color: Colors.black
+                                          ),
+                                        )
+                                    ),
+
+                                  if(!isLastPage && currentIndex != OnBoardingItems.length-1)
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            currentIndex += 1;
+                                          });
+                                        },
+                                        child: Text(
+                                          "Next",
+                                          style: GoogleFonts.lato(
+                                              fontSize: 15,
+                                              color: Colors.white
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                        )
+                                    ),
+                                ],
+                              ),
+                              if(currentIndex == OnBoardingItems.length-1)
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+                                    },
+                                    child: Text(
+                                      "Commencer",
+                                      style: GoogleFonts.lato(
+                                          fontSize: 15,
+                                          color: Colors.white
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                    )
+                                )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
 
                       ],),
                   )
